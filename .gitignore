@@ -4,7 +4,7 @@ licenses/
 testServer/node_modules
 venv
 THIRD-PARTY-LICENSES.txt
-
+config.py
 
 
 
