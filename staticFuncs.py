@@ -28,16 +28,16 @@ def openAbout():
     os.startfile(getResPath('LICENSE'))
     os.startfile(getResPath('THIRD-PARTY-LICENSES.txt'))
 
-def getServerStatus():
+def getServerStatus(maxTries=2):
     url=f"http://localhost/api/testConnection"
-    tries=0
-    while tries <=1:
-        print('url ',url)
+    tries=1
+    while tries <=maxTries:
+        url=f"https://localhost/api/testConnection" if tries % maxTries!=0 else f"http://localhost/api/testConnection"
+        print('url: ', url)
         try:
             if requests.get(url,timeout=1,verify=False).status_code==200: 
                 return 1 if tries==0 else 2 
         except:None
-        url=f"https://localhost/api/testConnection"
         tries+=1
     return False
 
@@ -53,15 +53,15 @@ def setServerStatus(order):
     except:
         return False
     command=''
-    path=os.path.abspath(os.path.join(get_app_dir(), SERVER_FILE_NAME if not isExe() else 'TizonaServer.js'))
-    print('path: ', path)
+    path=os.path.abspath(os.path.join(get_app_dir(), SERVER_FILE_NAME if not isExe() else 'TizonaServer/tizonaServer.js'))
+    
     if order==0:   command= ['pm2','stop',path]
-    elif order==1: command= ['pm2','start',path]
+    elif order==1: command= ['pm2','start', path]
     elif order==2: command= ['pm2','startup']
 
-    process=subprocess.run(command,shell=True)
+    process=subprocess.run(command,shell=True,check=True,cwd=os.path.dirname(path))
 
-    return getServerStatus()
+    return getServerStatus(2)
         
 def handleSetServerStatus(mainFrame):
     def task():
