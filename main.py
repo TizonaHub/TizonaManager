@@ -11,6 +11,8 @@ class App(CTk):
     def __init__(self):
         super().__init__()
         self.resizable(False,False)
+        self.title('Tizona manager')
+        self.iconbitmap(getResPath('icon.ico'))
         self.geometry(getGeometry(self))
         self.grid_rowconfigure((0),weight=1)
         self.grid_rowconfigure((1),weight=3)
@@ -38,7 +40,7 @@ def initApp():
         if is_admin():
             app = App()
             app.mainloop()
-        else: ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, True)  
+        else: ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, DEBUG_MODE)  
 
     except:
         traceback.print_exc()
