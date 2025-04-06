@@ -1,5 +1,4 @@
 DEBUG_MODE=True
-PATH='D:/projects/TizonaApp/TizonaServer'
 FSIZE=16
 FONT='Roboto'
 STATUSBALLSIZE=10
