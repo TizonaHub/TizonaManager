@@ -5,7 +5,6 @@ import os
 from threading import Thread
 from config import *
 import sys
-
 serverFilePath=os.path.abspath(os.path.abspath(os.path.dirname(__file__))+SERVER_FILE_NAME)
 def getGeometry(self):
     screenWidth=self.winfo_screenwidth()
@@ -29,14 +28,16 @@ def openAbout():
     os.startfile(getResPath('THIRD-PARTY-LICENSES.txt'))
 
 def getServerStatus(maxTries=2):
-    url=f"http://localhost/api/testConnection"
+    print('maxTries: ', maxTries)
+    url=f"http://localhost/api/system/ping"
     tries=1
     while tries <=maxTries:
-        url=f"https://localhost/api/testConnection" if tries % maxTries!=0 else f"http://localhost/api/testConnection"
+        module=tries % 2 ==0
+        url=f"https://localhost/api/system/ping" if module else f"http://localhost/api/system/ping"
         print('url: ', url)
         try:
             if requests.get(url,timeout=1,verify=False).status_code==200: 
-                return 1 if tries==0 else 2 
+                return 1 if module else 2 
         except:None
         tries+=1
     return False
@@ -53,15 +54,14 @@ def setServerStatus(order):
     except:
         return False
     command=''
-    path=os.path.abspath(os.path.join(get_app_dir(), SERVER_FILE_NAME if not isExe() else 'TizonaServer/tizonaServer.js'))
+    path=os.path.abspath(os.path.join(get_app_dir(), SERVER_FILE_NAME if not isExe() else 'TizonaServer/start.js'))
     
     if order==0:   command= ['pm2','stop',path]
     elif order==1: command= ['pm2','start', path]
     elif order==2: command= ['pm2','startup']
 
     process=subprocess.run(command,shell=True,check=True,cwd=os.path.dirname(path))
-
-    return getServerStatus(2)
+    return getServerStatus(6 if order==1 else 2)
         
 def handleSetServerStatus(mainFrame):
     def task():
