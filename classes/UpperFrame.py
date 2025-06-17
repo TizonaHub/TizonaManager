@@ -12,8 +12,8 @@ class UpperFrame(CTkFrame):
         statusColor= ('green','lime') if serverStatus else 'red'
         buttonText='Start server' if not serverStatus else 'Stop server'
         statusText='Server is not running'
-        if serverStatus==1: statusText='HTTP server is running'
-        elif serverStatus ==2: statusText='HTTPS server is running'
+        if serverStatus==2: statusText='HTTP server is running'
+        elif serverStatus ==1: statusText='HTTPS server is running'
         upperContainer1=CTkFrame(self,fg_color='transparent')
         upperContainer1.grid_rowconfigure(0,weight=1)
         upperContainer1.grid_columnconfigure((0,2),weight=1)
