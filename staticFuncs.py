@@ -25,7 +25,7 @@ def getResPath(relative_path):
 
 def openAbout():
     os.startfile(getResPath('LICENSE'))
-    os.startfile(getResPath('THIRD-PARTY-LICENSES.txt'))
+    os.startfile(getResPath('licenses/THIRD-PARTY-LICENSES.txt'))
 
 def getServerStatus(maxTries=2):
     print('maxTries: ', maxTries)
