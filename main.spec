@@ -8,7 +8,8 @@ a = Analysis(
     datas=[
         ('LICENSE','.'),
         ('icon.ico','.'),
-        ('THIRD-PARTY-LICENSES.txt','.')
+        ('licenses/THIRD-PARTY-LICENSES.txt','licenses'),
+        ('config.py','.')
     ],
     hiddenimports=[],
     hookspath=[],
