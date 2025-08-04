@@ -29,6 +29,9 @@ def openAbout():
     sleep(0.5)
     os.startfile(getResPath('licenses'))
 
+# 0: SERVER UNREACHABLE
+# 1: HTTPS
+# 2: HTTP
 def getServerStatus(maxTries=2,timeoutParam=1):
     print('maxTries: ', maxTries)
     url=f"http://localhost/api/system/ping"
