@@ -41,10 +41,7 @@ class App(CTk):
             counter=counter+1
 
     def updateUpperFrame(self,serverStatus):
-        newFrame=UpperFrame(self,serverStatus)
-        self.upperFrame.destroy()
-        self.upperFrame=newFrame
-        self.upperFrame.grid(row=0,column=0,sticky='nsew')
+        self.upperFrame.update(serverStatus)
 
 def initApp():
     def is_admin():
