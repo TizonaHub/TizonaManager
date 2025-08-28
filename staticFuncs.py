@@ -7,6 +7,16 @@ from config import *
 import sys
 from time import sleep
 serverFilePath=os.path.abspath(os.path.abspath(os.path.dirname(__file__))+SERVER_FILE_NAME)
+
+def getIp():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+    finally:
+        s.close()
+    return ip
+
 def getGeometry(self):
     screenWidth=self.winfo_screenwidth()
     screenHeight=self.winfo_screenheight()
