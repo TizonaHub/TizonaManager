@@ -12,6 +12,7 @@ class UpperFrame(CTkFrame):
 
         upperContainer1=CTkFrame(self,fg_color='transparent')
         upperContainer1.grid_rowconfigure(0,weight=1)
+        upperContainer1.grid_rowconfigure(1,weight=0)
         upperContainer1.grid_columnconfigure((0,2),weight=1)
         
         self.statusBall=CTkFrame(upperContainer1,fg_color=self.statusColor,width=STATUSBALLSIZE,height=STATUSBALLSIZE,corner_radius=100)
@@ -29,18 +30,27 @@ class UpperFrame(CTkFrame):
         upperContainer2=CTkFrame(self,fg_color='transparent')
         upperContainer2.grid_rowconfigure((0,1,2),weight=1)
         upperContainer2.grid_columnconfigure(0,weight=1)
-        self.startStopButton=CTkButton(upperContainer2,**button_config,text=self.buttonText,command= lambda: handleSetServerStatus(parent))
+        upperContainer2.grid(row=0,column=1,sticky='nsew')
+        self.startStopButton=CTkButton(upperContainer2,**button_config,text=self.buttonText,command=lambda:self.handleClick(parent))
         self.startStopButton.grid(row=1,column=0)
+
+        self.progressBarFrame=CTkFrame(self,fg_color='transparent',height=8)
+        self.progressBarFrame.grid(row=1,column=0,columnspan=2,sticky='ns',pady=(0,8))
+        self.progressBar = CTkProgressBar(self.progressBarFrame, mode="indeterminate",progress_color='orange')
+        self.progressBar.start()
         #CTkButton(upperContainer2,**button_config,text='Enable auto startup',command= lambda: handleSetServerStatus(parent)).grid(row=1,column=0)
         #CTkButton(upperContainer2,**button_config,text='Disable auto startup',command= lambda: handleSetServerStatus(parent)).grid(row=2,column=0)
 
-        upperContainer2.grid(row=0,column=1,sticky='nsew')
-    
+    def handleClick(self,parent):
+        self.progressBar.grid(row=1,column=0,columnspan=2)
+        handleSetServerStatus(parent)
+
     def update(self,serverStatus):
         self.updateValues(serverStatus)
         self.statusBall.configure(fg_color=self.statusColor)
         self.statusTextLabel.configure(text=self.statusText)
         self.startStopButton.configure(text=self.buttonText)
+        self.progressBar.grid_forget()
 
     def updateValues(self,serverStatus):
         self.statusColor= ('green','lime') if serverStatus else 'red'
