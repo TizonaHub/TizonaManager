@@ -1,6 +1,5 @@
 from customtkinter import *
 from config import FONT,FSIZE
-import socket
 from staticFuncs import openAbout,getIp
 class InfoFrame(CTkFrame):
     def __init__(self,parent):
