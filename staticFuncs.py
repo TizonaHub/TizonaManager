@@ -5,6 +5,7 @@ import os
 from threading import Thread
 from config import *
 import sys
+import pickle
 from time import sleep
 serverFilePath=os.path.abspath(os.path.abspath(os.path.dirname(__file__))+SERVER_FILE_NAME)
 
@@ -69,7 +70,9 @@ def setServerStatus(order):
     except:
         return False
     command=''
-    path=os.path.abspath(os.path.join(get_app_dir(), SERVER_FILE_NAME if not isExe() else 'TizonaServer/start.js'))
+    path1=os.path.join(readData(4),'TizonaServer/start.js') if path1 else False
+    path2=os.path.abspath(os.path.join(get_app_dir(), SERVER_FILE_NAME if not isExe() else 'TizonaServer/start.js'))
+    path=path1 if path1 or TEST_PROGRAMDATA else path2
     
     if order==0:   command= ['pm2','stop',path]
     elif order==1: command= ['pm2','start', path]
@@ -93,6 +96,19 @@ def handleSetServerStatus(mainComponent=False):
     thread = Thread(target=task)
     thread.start()
     
+    
+def readData(index=False):
+    info=None 
+    program_data = os.environ.get("PROGRAMDATA", r"C:\ProgramData")
+    app_data_dir = os.path.join(program_data, "TizonaHub")
+    data_file = os.path.join(app_data_dir, "data.dat")
+    try:
+        with open(data_file, "rb") as f:
+                info = pickle.load(f)
+                return info if not index else list(list(info.values())[index])[0]
+    except Exception as e:
+        print('Error at readData: ',e)
+        return False
     
 def get_app_dir():
     if getattr(sys, 'frozen', False): return os.path.dirname(sys.executable)
