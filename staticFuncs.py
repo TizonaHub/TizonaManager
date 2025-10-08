@@ -70,7 +70,7 @@ def setServerStatus(order):
     except:
         return False
     command=''
-    path1=os.path.join(readData(4),'TizonaServer/start.js') if path1 else False
+    path1=os.path.join(readData(4),'TizonaServer/start.js') or False
     path2=os.path.abspath(os.path.join(get_app_dir(), SERVER_FILE_NAME if not isExe() else 'TizonaServer/start.js'))
     path=path1 if path1 or TEST_PROGRAMDATA else path2
     
