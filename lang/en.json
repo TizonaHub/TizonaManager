@@ -1,0 +1,30 @@
+{
+  "InfoFrame": {
+    "labels": {
+      "host_ip": "Host IP adress is {ip}",
+      "up_to_date": "TizonaHub is up to date",
+      "version": "v0.5.0",
+      "about": "About"
+    },
+    "buttons": {
+      "update": "Update",
+      "uninstall": "Uninstall"
+    },
+    "errors": {
+      "shell_not_available": "Shell is not available"
+    }
+  },
+  "UpperFrame": {
+    "status": {
+      "server_not_running": "Server is not running",
+      "http_running": "HTTP server is running",
+      "https_running": "HTTPS server is running"
+    },
+    "buttons": {
+      "start_server": "Start server",
+      "stop_server": "Stop server",
+      "enable_auto_startup": "Enable auto startup",
+      "disable_auto_startup": "Disable auto startup"
+    }
+  }
+}
