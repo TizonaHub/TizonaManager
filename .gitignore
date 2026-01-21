@@ -6,6 +6,8 @@ venv
 THIRD-PARTY-LICENSES.txt
 config.py
 test2
+installerLatest.exe
+uninstall.exe
 
 
 

@@ -9,7 +9,10 @@ a = Analysis(
         ('LICENSE','.'),
         ('icon.ico','.'),
         ('licenses','licenses'),
-        ('config.py','.')
+        ('lang/es.json','lang'),
+        ('lang/en.json','lang'),
+        ('config.py','.'),
+        ('uninstall.exe','.'),
     ],
     hiddenimports=[],
     hookspath=[],
