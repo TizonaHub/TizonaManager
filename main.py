@@ -8,7 +8,14 @@ from config import *
 import traceback
 import ctypes
 import threading
+from pathlib import Path
+import tempfile
 
+temp_path = Path(tempfile.gettempdir())
+dest = temp_path / "uninstall.exe"
+if os.path.isfile(dest): os.remove(dest)
+dest = temp_path / "installerLatest.exe"
+if os.path.isfile(dest): os.remove(dest)
 class App(CTk):
     def __init__(self):
         super().__init__()
@@ -16,7 +23,7 @@ class App(CTk):
         self.title('Tizona manager')
         self.iconbitmap(getResPath('icon.ico'))
         self.geometry(getGeometry(self))
-        self.grid_rowconfigure((0),weight=1)
+        self.grid_rowconfigure((0),weight=0, minsize=100)
         self.grid_rowconfigure((1),weight=3)
         self.grid_columnconfigure(0,weight=1)
         serverStatus=0 #getServerStatus()

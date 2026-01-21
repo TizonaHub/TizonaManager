@@ -6,7 +6,11 @@ from threading import Thread
 from config import *
 import sys
 import pickle
+import shutil
 from time import sleep
+import locale
+import json
+
 serverFilePath=os.path.abspath(os.path.abspath(os.path.dirname(__file__))+SERVER_FILE_NAME)
 
 def getIp():
@@ -62,6 +66,7 @@ def getServerStatus(maxTries=2,timeoutParam=1):
 0: stop server
 1: start server
 2: start server at startup
+3: delete process
 '''
 def setServerStatus(order):
     try:
@@ -70,13 +75,21 @@ def setServerStatus(order):
     except:
         return False
     command=''
-    path1=os.path.join(readData(4),'TizonaServer/start.js') or False
+    path1=os.path.join(readData('installationPath'),'TizonaServer/start.js') or False
     path2=os.path.abspath(os.path.join(get_app_dir(), SERVER_FILE_NAME if not isExe() else 'TizonaServer/start.js'))
     path=path1 if path1 or TEST_PROGRAMDATA else path2
     
     if order==0:   command= ['pm2','stop',path]
-    elif order==1: command= ['pm2','start', path]
-    elif order==2: command= ['pm2','startup']
+    elif order==1: command= ['pm2','start', path,'--name','tizonahubstart']
+    elif order==3: 
+        try:        
+            command= ['pm2','kill']
+            process=subprocess.run(command,shell=True,check=True,cwd=os.path.dirname(path))
+            return True
+        except:
+          return False
+
+    #elif order==2: command= ['pm2','startup']
 
     process=subprocess.run(command,shell=True,check=True,cwd=os.path.dirname(path))
         
@@ -105,7 +118,7 @@ def readData(index=False):
     try:
         with open(data_file, "rb") as f:
                 info = pickle.load(f)
-                return info if not index else list(list(info.values())[index])[0]
+                return info if not index else info[index]
     except Exception as e:
         print('Error at readData: ',e)
         return False
@@ -116,3 +129,69 @@ def get_app_dir():
 
 def isExe():
     return getattr(sys, 'frozen', False)
+
+def update():
+    print('update')
+
+def downloadResource(url, dest):
+    try: 
+        response = requests.get(url, stream=True, timeout=10)
+        if response.status_code != 200:
+            print(f"Error downloading: status {response.status_code}")
+            print('Press enter to exitFN')
+            sys.exit(1)
+            return False
+        with open(getResPath(dest), 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:
+                    f.write(chunk)
+        return True
+    except Exception as e:
+        print("Could not download (no internet or server error).")
+        print('Press enter to exitFN')
+        input()
+        sys.exit(1)
+        return False
+
+def getResPath(relative_path=''):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    path=os.path.join(base_path, relative_path)
+    return os.path.abspath(path)
+
+def getShell():
+    if shutil.which('wt'): return shutil.which('wt')
+    if shutil.which('powershell'): return shutil.which('powershell')
+    if shutil.which('cmd'): return shutil.which('cmd')
+    
+def isExe():
+    try:
+        base_path = sys._MEIPASS
+        return True
+    except Exception:
+        return False
+    
+def get_system_language():
+    try:
+        lang, _ = locale.getdefaultlocale()
+    except Exception:
+        lang = None
+
+    if lang:
+        lang = lang.lower()
+        if lang.startswith("es"):
+            return "es"
+        if lang.startswith("en"):
+            return "en"
+    return "en" #default
+def get_language_dict():
+    lang = get_system_language()
+    if lang == "es":
+        with open(getResPath('./lang/es.json'), "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return data
+    with open(getResPath('./lang/en.json'), "r", encoding="utf-8") as f:
+        data = json.load(f)
+        return data
